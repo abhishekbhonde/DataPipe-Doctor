@@ -1,7 +1,10 @@
 import { generateObject } from "ai";
+import { google } from "@ai-sdk/google";
 import { z } from "zod";
 
-const EXPLANATION_MODEL = process.env.PIPEDOCTOR_MODEL ?? "anthropic/claude-sonnet-4.5";
+// Calls Google Gemini directly (not via Vercel AI Gateway) — a free API key from
+// Google AI Studio needs no credit card on file, unlike AI Gateway's verification step.
+const EXPLANATION_MODEL = google(process.env.PIPEDOCTOR_MODEL ?? "gemini-3.5-flash");
 
 const explanationSchema = z.object({
   rootCause: z.string().describe("Plain-English explanation of why this test actually failed, grounded in the SQL and lineage given — not a restatement of the failure message."),

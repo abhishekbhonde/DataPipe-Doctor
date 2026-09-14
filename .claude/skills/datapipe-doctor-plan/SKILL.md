@@ -19,7 +19,7 @@ This project is explicitly shaped like a real product (not a toy) because that's
 - **Database: Postgres via Vercel Marketplace** (Neon). Provision via `vercel integration add`, never hand-configured credentials.
 - **Artifact storage: Vercel Blob** for raw `manifest.json`/`run_results.json`. Keep Postgres rows lean — parsed data in tables, raw JSON in Blob.
 - **Compute: Vercel Functions, Fluid compute (default)** — plain Node.js, no edge runtime.
-- **AI: AI SDK + AI Gateway** — model-agnostic `"provider/model"` strings, gives spend observability per org for free.
+- **AI: AI SDK + Google Gemini, called directly** (`@ai-sdk/google`, `GOOGLE_GENERATIVE_AI_API_KEY`) — **not** via Vercel AI Gateway. Gateway requires a credit card on file before it'll serve any request, even free-tier ones; a Google AI Studio key needs no card. `lib/ai/explain.ts` is the one place this is wired — swapping back to Gateway later is a one-file change if the card requirement stops being a blocker. Model: `gemini-3.5-flash` (override via `PIPEDOCTOR_MODEL`).
 - **Lineage UI: React Flow** for the DAG — the centerpiece screen for demos/screenshots.
 
 ## Data model (Postgres, every table carries `org_id` from Clerk)
@@ -65,6 +65,11 @@ All reads/writes go through a single `withOrgScope(orgId)` query helper (`lib/db
 - `lib/ai/explain.ts` — context builder + AI Gateway call
 - `cli/pipedoctor.ts` — CLI wrapper
 - `app/dashboard/[project]/runs/[runId]/page.tsx` + `LineageGraph` component — centerpiece UI
+
+## Testing
+
+- `npm run db:seed -- <clerkOrgId>` seeds a realistic demo project (jaffle_shop-style lineage, a deliberate LEFT JOIN bug, 4 runs alternating pass/fail) into a real org, including real AI explanations.
+- `npm run smoke-test -- <orgIdA> <orgIdB>` is an end-to-end check against a running dev server: HTTP ingestion happy path, auth negative cases (missing/bad/revoked key, malformed payload), tenant isolation between two orgs, and the flaky-test/trend-count read paths. Re-run this after touching `/api/ingest`, `lib/db/queries.ts`, or the auth boundary.
 
 ## Verification checklist
 
