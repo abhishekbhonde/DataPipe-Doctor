@@ -16,4 +16,3 @@ When a dbt/data pipeline test fails ("null values found", "duplicate keys"), it 
 ## Stack
 
 Next.js, Postgres, AI Gateway (LLM), React Flow (lineage graph), deployed on Vercel.
-# DataPipe-Doctor
