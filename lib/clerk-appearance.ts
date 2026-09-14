@@ -1,8 +1,8 @@
 export const clerkAppearance = {
   variables: {
-    colorPrimary: "#2f6fed",
-    colorText: "#14181f",
-    colorTextSecondary: "#6b7280",
+    colorPrimary: "#c2410c",
+    colorText: "#12151c",
+    colorTextSecondary: "#667085",
     colorBackground: "#ffffff",
     borderRadius: "10px",
   },

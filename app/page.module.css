@@ -1,0 +1,377 @@
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+/* --- Hero --- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background:
+    radial-gradient(1200px 480px at 85% -10%, color-mix(in oklab, var(--primary) 9%, white), transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, var(--surface) 100%);
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 48px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 48px 24px 88px;
+}
+@media (min-width: 768px) {
+  .heroInner {
+    grid-template-columns: 1fr 1fr;
+    padding: 56px 24px 112px;
+  }
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  background: var(--background);
+  border-radius: 999px;
+  padding: 5px 12px 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+  box-shadow: var(--shadow-xs);
+}
+
+.eyebrowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--good);
+}
+
+.title {
+  font-size: 44px;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--foreground);
+}
+
+.accent {
+  color: var(--primary);
+}
+
+.subtitle {
+  max-width: 460px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.buttonPrimary,
+.buttonSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 46px;
+  padding: 0 22px;
+  border-radius: var(--radius-sm);
+  font-size: 14.5px;
+  font-weight: 500;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.buttonPrimary {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
+}
+.buttonPrimary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.buttonSecondary {
+  border: 1px solid var(--border);
+  background: var(--background);
+  color: var(--foreground);
+}
+.buttonSecondary:hover {
+  background: var(--surface);
+}
+
+.microcopy {
+  font-size: 13px;
+  color: var(--muted-light);
+}
+
+/* --- Product preview card --- */
+
+.preview {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--background);
+  padding: 18px;
+  box-shadow: var(--shadow-lg);
+}
+
+.previewDots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dotCritical {
+  background: color-mix(in oklab, var(--critical) 30%, transparent);
+}
+.dotWarning {
+  background: color-mix(in oklab, var(--warning) 30%, transparent);
+}
+.dotGood {
+  background: color-mix(in oklab, var(--good) 30%, transparent);
+}
+
+.testRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+}
+
+.testName {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--foreground);
+}
+
+.arrow {
+  display: flex;
+  justify-content: center;
+  margin: 14px 0;
+  color: var(--muted-light);
+}
+
+.explanation {
+  border: 1px solid color-mix(in oklab, var(--primary) 22%, transparent);
+  background: var(--primary-light);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+}
+
+.explanationLabel {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.explanationBody {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--foreground);
+}
+
+.explanationBody code {
+  background: var(--background);
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 0.9em;
+}
+
+/* --- Section shell --- */
+
+.section {
+  max-width: 1080px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 72px 24px;
+}
+
+.sectionHead {
+  max-width: 560px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.sectionEyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+.sectionTitle {
+  margin-top: 8px;
+  font-size: 28px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+/* --- How it works --- */
+
+.steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+@media (min-width: 720px) {
+  .steps {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.stepNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.stepTitle {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.stepBody {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* --- Feature strip --- */
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--border);
+  box-shadow: var(--shadow-xs);
+}
+@media (min-width: 640px) {
+  .featureGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feature {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--background);
+  padding: 28px;
+}
+
+.featureIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.featureTitle {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.featureBody {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* --- Final CTA --- */
+
+.ctaBand {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.ctaInner {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 72px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.ctaTitle {
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--foreground);
+}
+
+.ctaBody {
+  font-size: 14.5px;
+  color: var(--muted);
+  max-width: 420px;
+}
+
+/* --- Footer --- */
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 28px 24px;
+  font-size: 13px;
+  color: var(--muted-light);
+}

@@ -1,0 +1,20 @@
+.spotlight {
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  width: 140%;
+  height: 180%;
+  opacity: 0;
+  animation: spotlightIn 2s ease 0.2s forwards;
+}
+
+@keyframes spotlightIn {
+  0% {
+    opacity: 0;
+    transform: translate(-64%, -58%) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -42%) scale(1);
+  }
+}

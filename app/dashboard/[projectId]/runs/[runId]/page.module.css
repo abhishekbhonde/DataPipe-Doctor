@@ -1,0 +1,21 @@
+.crumb {
+  font-size: 13px;
+  color: var(--muted);
+}
+.crumb a:hover {
+  text-decoration: underline;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0 20px;
+}
+
+.title {
+  font-size: 21px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}

@@ -1,3 +1,5 @@
+import styles from "./RunTrendChart.module.css";
+
 interface RunPoint {
   id: string;
   startedAt: Date | string;
@@ -21,13 +23,13 @@ export function RunTrendChart({ runs }: { runs: RunPoint[] }) {
 
   return (
     <div>
-      <div className="mb-2 flex items-center gap-4 text-xs text-black/60 dark:text-white/60">
-        <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: GOOD }} />
+      <div className={styles.legend}>
+        <span className={styles.swatch}>
+          <span className={styles.dot} style={{ background: GOOD }} />
           Passed
         </span>
-        <span className="inline-flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-sm" style={{ background: CRITICAL }} />
+        <span className={styles.swatch}>
+          <span className={styles.dot} style={{ background: CRITICAL }} />
           Failed
         </span>
       </div>
@@ -44,13 +46,9 @@ export function RunTrendChart({ runs }: { runs: RunPoint[] }) {
               <title>
                 {new Date(run.startedAt).toLocaleString()} — {run.passCount} passed, {run.failCount} failed
               </title>
-              {passH > 0 && (
-                <rect x={x} y={passY} width={barWidth} height={passH} rx={4} fill={GOOD} />
-              )}
-              {failH > 0 && (
-                <rect x={x} y={failY} width={barWidth} height={failH} rx={4} fill={CRITICAL} />
-              )}
-              {total === 0 && <rect x={x} y={height - 4} width={barWidth} height={4} rx={2} fill="currentColor" opacity={0.15} />}
+              {passH > 0 && <rect x={x} y={passY} width={barWidth} height={passH} rx={4} fill={GOOD} />}
+              {failH > 0 && <rect x={x} y={failY} width={barWidth} height={failH} rx={4} fill={CRITICAL} />}
+              {total === 0 && <rect x={x} y={height - 4} width={barWidth} height={4} rx={2} fill="#e5e7eb" />}
             </g>
           );
         })}

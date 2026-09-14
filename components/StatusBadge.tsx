@@ -15,10 +15,7 @@ export function StatusBadge({ status }: { status: string }) {
   const variant = key === "pass" || key === "success" ? "good" : key === "partial" ? "warning" : "critical";
 
   return (
-    <span
-      data-variant={variant}
-      className="pipedoctor-badge inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium"
-    >
+    <span data-variant={variant} className="pipedoctor-badge">
       <span aria-hidden>{icon}</span>
       {label}
     </span>

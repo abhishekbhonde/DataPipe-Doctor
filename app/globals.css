@@ -1,47 +1,123 @@
-@import "tailwindcss";
-
 :root {
   --background: #ffffff;
-  --surface: #f6f8fa;
-  --foreground: #14181f;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --primary: #2f6fed;
-  --primary-hover: #2558c4;
+  --surface: #f6f8fb;
+  --surface-hover: #eef1f6;
+  --foreground: #12151c;
+  --muted: #667085;
+  --muted-light: #98a2b3;
+  --border: #e4e7ec;
+  --border-strong: #d0d5dd;
+
+  --primary: #c2410c;
+  --primary-hover: #9a3412;
+  --primary-light: #fdf1e9;
+  --primary-glow: rgba(194, 65, 12, 0.35);
+
   --good: #0ca30c;
+  --good-light: #eafaea;
   --warning: #b7791f;
+  --warning-light: #fdf3e2;
   --critical: #d03b3b;
+  --critical-light: #fceaea;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+
+  --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.08), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.08), 0 2px 4px rgba(16, 24, 40, 0.04);
+  --shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.12), 0 4px 8px rgba(16, 24, 40, 0.04);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-surface: var(--surface);
-  --color-foreground: var(--foreground);
-  --color-muted: var(--muted);
-  --color-border: var(--border);
-  --color-primary: var(--primary);
-  --color-primary-hover: var(--primary-hover);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 /* Always white — this product does not follow the OS dark-mode preference. */
+html,
 body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+code {
+  font-family: var(--font-mono);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--primary) 22%, transparent);
+}
+
+.appShell {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.authScreen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 48px 24px;
+  background:
+    radial-gradient(900px 380px at 50% -10%, color-mix(in oklab, var(--primary) 7%, white), transparent 65%),
+    var(--surface);
 }
 
 /* Status palette — reserved for state (pass/fail/etc.), never reused for series identity. */
+.pipedoctor-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 12px;
+  font-weight: 500;
+}
 .pipedoctor-badge[data-variant="good"] {
-  background: color-mix(in oklab, #0ca30c 12%, transparent);
-  color: #0ca30c;
+  background: var(--good-light);
+  color: var(--good);
 }
 .pipedoctor-badge[data-variant="warning"] {
-  background: color-mix(in oklab, #b7791f 16%, transparent);
-  color: #92600f;
+  background: var(--warning-light);
+  color: var(--warning);
 }
 .pipedoctor-badge[data-variant="critical"] {
-  background: color-mix(in oklab, #d03b3b 12%, transparent);
-  color: #d03b3b;
+  background: var(--critical-light);
+  color: var(--critical);
 }

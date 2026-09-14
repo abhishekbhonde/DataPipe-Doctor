@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { createProjectAction } from "@/lib/actions";
+import styles from "./NewProjectForm.module.css";
 
 export function NewProjectForm() {
   const [open, setOpen] = useState(false);
@@ -13,10 +14,7 @@ export function NewProjectForm() {
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-primary px-4 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
-      >
+      <button onClick={() => setOpen(true)} className={styles.trigger}>
         <span aria-hidden>+</span>
         New project
       </button>
@@ -24,26 +22,12 @@ export function NewProjectForm() {
   }
 
   return (
-    <form action={formAction} className="flex items-center gap-2">
-      <input
-        name="name"
-        placeholder="Project name"
-        required
-        autoFocus
-        className="h-9 w-56 rounded-lg border border-border px-3 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/15"
-      />
-      <button
-        type="submit"
-        disabled={pending}
-        className="inline-flex h-9 items-center rounded-lg bg-primary px-4 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:opacity-50"
-      >
+    <form action={formAction} className={styles.form}>
+      <input name="name" placeholder="Project name" required autoFocus className={styles.input} />
+      <button type="submit" disabled={pending} className={styles.submit}>
         {pending ? "Creating…" : "Create"}
       </button>
-      <button
-        type="button"
-        onClick={() => setOpen(false)}
-        className="inline-flex h-9 items-center rounded-lg px-3 text-sm text-muted hover:text-foreground"
-      >
+      <button type="button" onClick={() => setOpen(false)} className={styles.cancel}>
         Cancel
       </button>
     </form>

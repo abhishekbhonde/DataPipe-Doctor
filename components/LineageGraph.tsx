@@ -13,6 +13,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { computeDagLayout } from "./dagLayout";
+import styles from "./LineageGraph.module.css";
 
 export interface LineageModel {
   id: string;
@@ -37,17 +38,14 @@ export interface LineageExplanation {
 
 const GOOD = "#0ca30c";
 const CRITICAL = "#d03b3b";
-const NEUTRAL = "#8a8a86";
+const NEUTRAL = "#94a3b8";
 
 function ModelNode({ data }: NodeProps<Node<{ name: string; status: "good" | "critical" | "neutral" }>>) {
   const color = data.status === "critical" ? CRITICAL : data.status === "good" ? GOOD : NEUTRAL;
   return (
-    <div
-      className="rounded-md border bg-[var(--background)] px-3 py-2 text-xs shadow-sm"
-      style={{ borderColor: color, borderWidth: 1.5 }}
-    >
+    <div className={styles.node} style={{ borderColor: color }}>
       <Handle type="target" position={Position.Left} style={{ opacity: 0 }} />
-      <span className="flex items-center gap-1.5 font-medium">
+      <span className={styles.nodeLabel}>
         <span aria-hidden style={{ color }}>
           {data.status === "critical" ? "✕" : data.status === "good" ? "✓" : "○"}
         </span>
@@ -83,19 +81,19 @@ export function LineageGraph({
   const explanationByTestId = useMemo(() => new Map(explanations.map((e) => [e.testResultId, e])), [explanations]);
 
   const { nodes, edges } = useMemo(() => {
-    const positions = computeDagLayout(models.map((m) => ({ id: m.id, dependsOn: models.filter((x) => m.dependsOn.includes(x.uniqueId)).map((x) => x.id) })));
+    const positions = computeDagLayout(
+      models.map((m) => ({
+        id: m.id,
+        dependsOn: models.filter((x) => m.dependsOn.includes(x.uniqueId)).map((x) => x.id),
+      })),
+    );
     const uniqueIdToId = new Map(models.map((m) => [m.uniqueId, m.id]));
 
     const nodes: Node[] = models.map((m) => {
       const tests = testsByModelId.get(m.id) ?? [];
       const status = tests.length === 0 ? "neutral" : tests.some((t) => t.status !== "pass") ? "critical" : "good";
       const pos = positions.get(m.id) ?? { x: 0, y: 0 };
-      return {
-        id: m.id,
-        type: "modelNode",
-        position: pos,
-        data: { name: m.name, status },
-      };
+      return { id: m.id, type: "modelNode", position: pos, data: { name: m.name, status } };
     });
 
     const edges: Edge[] = models.flatMap((m) =>
@@ -107,6 +105,7 @@ export function LineageGraph({
           source: parentId,
           target: m.id,
           animated: false,
+          style: { stroke: "#e5e7eb" },
         })),
     );
 
@@ -117,8 +116,8 @@ export function LineageGraph({
   const selectedTests = selectedModelId ? (testsByModelId.get(selectedModelId) ?? []) : [];
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row">
-      <div className="h-[480px] flex-1 rounded-lg border border-black/10 dark:border-white/10">
+    <div className={styles.layout}>
+      <div className={styles.graph}>
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -127,52 +126,49 @@ export function LineageGraph({
           fitView
           proOptions={{ hideAttribution: true }}
         >
-          <Background />
+          <Background color="#e5e7eb" />
           <Controls showInteractive={false} />
         </ReactFlow>
       </div>
 
-      <aside className="flex w-full flex-col gap-3 md:w-80">
+      <aside className={styles.sidebar}>
         {!selectedModel ? (
-          <p className="text-sm text-black/50 dark:text-white/50">
+          <div className={styles.empty}>
             Click a model in the graph to see its test results and, for failures, the AI root-cause explanation.
-          </p>
+          </div>
         ) : (
-          <>
-            <h3 className="font-medium">{selectedModel.name}</h3>
+          <div className={styles.panel}>
+            <p className={styles.panelTitle}>{selectedModel.name}</p>
             {selectedTests.length === 0 ? (
-              <p className="text-sm text-black/50 dark:text-white/50">No tests attached to this model.</p>
+              <p className={styles.message}>No tests attached to this model.</p>
             ) : (
               selectedTests.map((t) => {
                 const explanation = explanationByTestId.get(t.id);
                 const failing = t.status !== "pass";
+                const color = failing ? CRITICAL : GOOD;
                 return (
-                  <div
-                    key={t.id}
-                    className="rounded-md border p-3 text-sm"
-                    style={{ borderColor: failing ? CRITICAL : GOOD }}
-                  >
-                    <p className="font-medium" style={{ color: failing ? CRITICAL : GOOD }}>
+                  <div key={t.id} className={styles.test} style={{ borderColor: color }}>
+                    <p className={styles.testName} style={{ color }}>
                       {failing ? "✕" : "✓"} {t.testName}
                     </p>
                     {failing && (
                       <>
-                        {t.failureMessage && <p className="mt-1 text-black/60 dark:text-white/60">{t.failureMessage}</p>}
+                        {t.failureMessage && <p className={styles.message}>{t.failureMessage}</p>}
                         {explanation ? (
-                          <div className="mt-2 flex flex-col gap-1.5">
+                          <div className={styles.explanation}>
                             <p>
-                              <span className="font-medium">Root cause: </span>
+                              <strong>Root cause: </strong>
                               {explanation.rootCause}
                             </p>
                             {explanation.suggestedFix && (
                               <p>
-                                <span className="font-medium">Suggested fix: </span>
+                                <strong>Suggested fix: </strong>
                                 {explanation.suggestedFix}
                               </p>
                             )}
                           </div>
                         ) : (
-                          <p className="mt-2 italic text-black/40 dark:text-white/40">No AI explanation available.</p>
+                          <p className={styles.message}>No AI explanation available.</p>
                         )}
                       </>
                     )}
@@ -180,7 +176,7 @@ export function LineageGraph({
                 );
               })
             )}
-          </>
+          </div>
         )}
       </aside>
     </div>

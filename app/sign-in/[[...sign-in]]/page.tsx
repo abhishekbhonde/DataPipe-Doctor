@@ -1,9 +1,14 @@
 import { SignIn } from "@clerk/nextjs";
+import { SiteHeader } from "@/components/SiteHeader";
+import { clerkAppearance } from "@/lib/clerk-appearance";
 
 export default function Page() {
   return (
-    <div className="flex flex-1 items-center justify-center p-8">
-      <SignIn />
-    </div>
+    <>
+      <SiteHeader />
+      <div className="authScreen">
+        <SignIn appearance={clerkAppearance} />
+      </div>
+    </>
   );
 }

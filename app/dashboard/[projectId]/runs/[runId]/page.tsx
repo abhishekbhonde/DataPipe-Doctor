@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { getProject, getRunDetail } from "@/lib/db/queries";
 import { StatusBadge } from "@/components/StatusBadge";
 import { LineageGraph } from "@/components/LineageGraph";
+import styles from "./page.module.css";
 
 export default async function RunPage({
   params,
@@ -21,22 +22,13 @@ export default async function RunPage({
   if (!detail) return notFound();
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <p className="text-sm text-black/50 dark:text-white/50">
-          <Link href="/dashboard" className="hover:underline">
-            Projects
-          </Link>{" "}
-          /{" "}
-          <Link href={`/dashboard/${projectId}`} className="hover:underline">
-            {project.name}
-          </Link>{" "}
-          / Run
-        </p>
-        <div className="mt-1 flex items-center gap-3">
-          <h1 className="text-xl font-semibold">{new Date(detail.run.startedAt).toLocaleString()}</h1>
-          <StatusBadge status={detail.run.status} />
-        </div>
+    <div>
+      <p className={styles.crumb}>
+        <Link href="/dashboard">Projects</Link> / <Link href={`/dashboard/${projectId}`}>{project.name}</Link> / Run
+      </p>
+      <div className={styles.head}>
+        <h1 className={styles.title}>{new Date(detail.run.startedAt).toLocaleString()}</h1>
+        <StatusBadge status={detail.run.status} />
       </div>
 
       <LineageGraph
