@@ -2,44 +2,46 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --surface: #f6f8fa;
+  --foreground: #14181f;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --primary: #2f6fed;
+  --primary-hover: #2558c4;
+  --good: #0ca30c;
+  --warning: #b7791f;
+  --critical: #d03b3b;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* Always white — this product does not follow the OS dark-mode preference. */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Status palette — reserved for state (pass/fail/etc.), never reused for series identity. */
 .pipedoctor-badge[data-variant="good"] {
-  background: color-mix(in oklab, #0ca30c 16%, transparent);
+  background: color-mix(in oklab, #0ca30c 12%, transparent);
   color: #0ca30c;
 }
 .pipedoctor-badge[data-variant="warning"] {
-  background: color-mix(in oklab, #fab219 20%, transparent);
-  color: #9a6a00;
+  background: color-mix(in oklab, #b7791f 16%, transparent);
+  color: #92600f;
 }
 .pipedoctor-badge[data-variant="critical"] {
-  background: color-mix(in oklab, #d03b3b 16%, transparent);
+  background: color-mix(in oklab, #d03b3b 12%, transparent);
   color: #d03b3b;
-}
-@media (prefers-color-scheme: dark) {
-  .pipedoctor-badge[data-variant="warning"] {
-    color: #fab219;
-  }
 }

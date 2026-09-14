@@ -10,12 +10,16 @@ async function requireOrgId() {
   return orgId;
 }
 
-export async function createProjectAction(formData: FormData): Promise<void> {
+export async function createProjectAction(
+  _prevState: { ok: boolean } | null,
+  formData: FormData,
+): Promise<{ ok: boolean }> {
   const orgId = await requireOrgId();
   const name = String(formData.get("name") ?? "").trim();
   if (!name) throw new Error("Project name is required");
   await createProject(orgId, name);
   revalidatePath("/dashboard");
+  return { ok: true };
 }
 
 export interface CreateApiKeyState {

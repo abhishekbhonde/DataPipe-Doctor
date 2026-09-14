@@ -198,6 +198,61 @@ export async function getRunDetail(orgId: string, projectId: string, runId: stri
   return { run, models: runModels, testResults: results, explanations };
 }
 
+export interface ProjectSummary {
+  id: string;
+  name: string;
+  createdAt: Date;
+  latestRun: { status: string; startedAt: Date } | null;
+  passCount: number;
+  failCount: number;
+}
+
+/** Everything the dashboard's project list needs in one pass: each project's
+ * latest run status + counts, plus org-wide totals for the stats strip. */
+export async function getDashboardOverview(orgId: string) {
+  const projectList = await listProjects(orgId);
+  if (projectList.length === 0) {
+    return { projects: [] as ProjectSummary[], stats: { totalProjects: 0, runsThisWeek: 0, failingProjects: 0 } };
+  }
+
+  const db = getDb();
+  const projectIds = projectList.map((p) => p.id);
+  const allRuns = await db
+    .select()
+    .from(pipelineRuns)
+    .where(and(eq(pipelineRuns.orgId, orgId), inArray(pipelineRuns.projectId, projectIds)))
+    .orderBy(desc(pipelineRuns.startedAt));
+
+  const latestRunByProject = new Map<string, (typeof allRuns)[number]>();
+  for (const r of allRuns) {
+    if (!latestRunByProject.has(r.projectId)) latestRunByProject.set(r.projectId, r);
+  }
+
+  const counts = await getRunTestCounts(
+    orgId,
+    [...latestRunByProject.values()].map((r) => r.id),
+  );
+
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const runsThisWeek = allRuns.filter((r) => r.startedAt >= weekAgo).length;
+  const failingProjects = [...latestRunByProject.values()].filter((r) => r.status !== "success").length;
+
+  const projects: ProjectSummary[] = projectList.map((p) => {
+    const run = latestRunByProject.get(p.id);
+    const c = run ? counts.get(run.id) : undefined;
+    return {
+      id: p.id,
+      name: p.name,
+      createdAt: p.createdAt,
+      latestRun: run ? { status: run.status, startedAt: run.startedAt } : null,
+      passCount: c?.pass ?? 0,
+      failCount: c?.fail ?? 0,
+    };
+  });
+
+  return { projects, stats: { totalProjects: projectList.length, runsThisWeek, failingProjects } };
+}
+
 /** A test is "flaky" if it failed in some but not all of its last N runs for the project. */
 export async function getFlakyTests(orgId: string, projectId: string, lastNRuns = 10) {
   const db = getDb();
